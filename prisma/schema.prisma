@@ -11,7 +11,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -20,6 +19,12 @@ model User {
   username            String        @db.VarChar(25)
   email               String        @unique
   password            String
+  
+  // Organizer profile
+  displayName         String?       @db.VarChar(50)
+  bio                 String?       @db.VarChar(150)
+  avatarUrl           String?
+  location            String?       @db.VarChar(50)
 
   role                Role
 
@@ -30,6 +35,10 @@ model User {
   review              Review[]
   transactions        Transaction[]
   promo               Promotion[]
+
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  deletedAt           DateTime?
 
   @@map("users")
 }
@@ -43,7 +52,9 @@ model Event {
   id                  String        @id @default(uuid())
 
   eventName           String        @db.VarChar(100)
-  eventDate           DateTime
+  startDate           DateTime
+  endDate             DateTime
+  imageUrl            String?
   location            String        @db.VarChar(100)
   description         String        @db.VarChar(150)
   seatTotal           Int
@@ -52,11 +63,10 @@ model Event {
   eventCategory       EventCategory
 
   userId              String
-  ticketId            String
 
   // Relation
   user                User          @relation(fields: [userId], references: [id])
-  ticket              TicketType    @relation(fields: [ticketId], references: [id])
+  ticketType          TicketType[]
   booking             Booking[]
   promotion           Promotion[]
   review              Review[]
@@ -76,7 +86,9 @@ model TicketType {
   seatAvailable       Int
 
   // Relation
-  ticket              Event[]
+  eventId             String
+
+  event               Event         @relation(fields: [eventId], references: [id]) 
 
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt

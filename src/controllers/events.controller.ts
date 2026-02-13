@@ -29,4 +29,86 @@ export const eventsController = {
       data: eventCategory,
     });
   },
+
+  async create(req: Request, res: Response) {
+    const {
+      eventName,
+      startDate,
+      endDate,
+      location,
+      description,
+      seatTotal,
+      eventType,
+      eventCategory,
+      userId,
+    } = req.body;
+
+    const files = req.file as Express.Multer.File;
+
+    const event = await eventsServices.create(files, {
+      eventName,
+      startDate,
+      endDate,
+      location,
+      description,
+      seatTotal,
+      eventType,
+      eventCategory,
+      userId,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Create event successful",
+      data: event,
+    });
+  },
+
+  async update(req: Request, res: Response) {
+    const { id } = req?.params;
+
+    const {
+      eventName,
+      startDate,
+      endDate,
+      location,
+      description,
+      seatTotal,
+      eventType,
+      eventCategory,
+      userId,
+    } = req.body;
+
+    const file = req.file as Express.Multer.File;
+
+    const event = await eventsServices.update(id as string, file, {
+      eventName,
+      startDate,
+      endDate,
+      location,
+      description,
+      seatTotal,
+      eventType,
+      eventCategory,
+      userId,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Update event successful",
+      data: event,
+    });
+  },
+
+  async delete(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const event = await eventsServices.delete(id as string);
+
+    res.status(200).json({
+      success: true,
+      message: "Delete event Successfull",
+      data: event,
+    });
+  },
 };
