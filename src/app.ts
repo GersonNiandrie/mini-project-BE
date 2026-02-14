@@ -1,9 +1,32 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
+import eventsRouter from "./routers/events.router";
+import ticketTypeRouter from "./routers/ticket-types.router";
 
 const PORT: number = 8000;
 
 const app = express();
 
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/api/ticket-types", ticketTypeRouter);
+app.use("/api/events", eventsRouter);
+
+
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error("ERROR:", err);
+
+  const statusCode = err.expose === true ? err.statusCode : 500;
+  const message = err.expose === true ? err.message : "Semothing went wrong";
+
+  res.status(statusCode).json({
+    success: false,
+    message,
+    data: null,
+  });
+});
+
 app.listen(PORT, () => {
-    console.log(`Application running on port ${PORT}`);
+  console.log(`Application running on port ${PORT}`);
 });
