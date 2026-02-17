@@ -47,8 +47,8 @@ export const promotionService = {
 
     const isInvalidDate =
       new Date(promoStartDate) > new Date(promoEndDate) ||
-      new Date(promoStartDate) < event.startDate ||
-      new Date(promoEndDate) > event.endDate;
+      new Date(promoStartDate) > event.startDate ||
+      new Date(promoEndDate) > event.startDate;
 
     if (isInvalidDate)
       throw AppError("Promo dates must be within event duration", 400);
@@ -71,14 +71,10 @@ export const promotionService = {
         promoName,
         promoStartDate: new Date(promoStartDate),
         promoEndDate: new Date(promoEndDate),
-        quota,
-        discAmount,
-        event: {
-          connect: { id: eventId },
-        },
-        user: {
-          connect: { id: userId },
-        },
+        quota: Number(quota),
+        discAmount: Number(discAmount),
+        eventId,
+        userId,
       },
     });
   },
@@ -121,8 +117,8 @@ export const promotionService = {
 
     const isInvalidDate =
       new Date(promoStartDate) > new Date(promoEndDate) ||
-      new Date(promoStartDate) < event.startDate ||
-      new Date(promoEndDate) > event.endDate;
+      new Date(promoStartDate) > event.startDate ||
+      new Date(promoEndDate) > event.startDate;
 
     if (isInvalidDate)
       throw AppError("Promo dates must be within event duration", 400);
@@ -150,12 +146,8 @@ export const promotionService = {
         promoEndDate: new Date(promoEndDate),
         quota,
         discAmount,
-        event: {
-          connect: { id: eventId },
-        },
-        user: {
-          connect: { id: userId },
-        },
+        eventId,
+        userId,
       },
     });
   },
