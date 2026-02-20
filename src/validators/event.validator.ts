@@ -66,9 +66,64 @@ export const createEventValidator = [
       `Event category must one of: ${Object.values(EventCategory).join(", ")}`,
     ),
 
-  body("userId")
-    .exists()
-    .withMessage("User ID name is required")
-    .isUUID()
-    .withMessage("User ID must valid UUID"),
+  body("ticketType")
+    .isArray({ min: 1 })
+    .withMessage("At least one ticket type is required"),
+
+  body("ticketType.*.name")
+    .trim()
+    .isLength({ min: 3, max: 20 })
+    .withMessage("Ticket type name must be between 3-20 characters"),
+
+  body("ticketType.*.price")
+    .isInt({ min: 0 })
+    .withMessage("Price must be a valid number and cannot be negative"),
+
+  body("ticketType.*.quantity")
+    .isInt({ min: 1 })
+    .withMessage("Seat available must be at least 1")
+    .custom((quantity, { req }) => {
+      if (Number(quantity) > Number(req.body.seatTotal)) {
+        throw new Error("Ticket seats cannot exceed total event seats");
+      }
+      return true;
+    }),
+
+  body("promoName")
+    .optional({ checkFalsy: true })
+    .isLength({ min: 5, max: 20 })
+    .withMessage("Promo name must be between 5-20 characters"),
+
+  body("promoStartDate")
+    .optional({ checkFalsy: true })
+    .isISO8601()
+    .withMessage("Promo start date must be a valid date")
+    .custom((startDate, { req }) => {
+      if (new Date(startDate) > new Date(req.body.startDate)) {
+        throw new Error("Promo must start before the event starts!");
+      }
+      return true;
+    }),
+
+  body("promoEndDate")
+    .optional({ checkFalsy: true })
+    .isISO8601()
+    .withMessage("Promo end date must be a valid date")
+    .custom((endDate, { req }) => {
+      if (new Date(endDate) <= new Date(req.body.promoStartDate)) {
+        throw new Error("Promo end date must be after promo start date");
+      }
+      if (new Date(endDate) > new Date(req.body.startDate)) {
+        throw new Error("Promo must end before or when the event starts");
+      }
+      return true;
+    }),
+
+  body("quota")
+    .optional({ checkFalsy: true })
+    .withMessage("Promo quota must be at least 1"),
+
+  body("discAmount")
+    .optional({ checkFalsy: true })
+    .withMessage("Discount amount must be a positive number"),
 ];
