@@ -45,11 +45,11 @@ export const eventsServices = {
         deletedAt: null
       },
       include: {
-        user: true
+        user: true,
+        ticketType: true,
+        promotion: true
       }
     });
-
-    console.log("INI DATA", event);
 
     return event
   },

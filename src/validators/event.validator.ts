@@ -121,9 +121,11 @@ export const createEventValidator = [
 
   body("quota")
     .optional({ checkFalsy: true })
+    .isInt({ min: 1 })
     .withMessage("Promo quota must be at least 1"),
 
   body("discAmount")
     .optional({ checkFalsy: true })
+    .isNumeric()
     .withMessage("Discount amount must be a positive number"),
 ];

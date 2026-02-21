@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import eventsRouter from "./routers/events.router";
-import cors from "cors"
+
+import cors from "cors";
 import { corsOptions } from "./config/cors.config";
 
 const PORT: number = 8000;
@@ -10,9 +11,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
 
-app.use('/api/events', eventsRouter)
+app.use("/api/events", eventsRouter);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error("ERROR:", err);
@@ -27,5 +28,5 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Application running on port ${PORT}`);
+  console.log(`Application running on port ${PORT}`);
 });

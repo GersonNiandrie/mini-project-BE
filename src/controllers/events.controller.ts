@@ -7,8 +7,6 @@ export const eventsController = {
 
     const eventId = await eventsServices.getById(id as string);
 
-    console.log(eventId)
-
     res.status(200).json({
       success: true,
       message: `Get event with id = ${id} success`,
