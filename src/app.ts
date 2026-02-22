@@ -1,6 +1,11 @@
 import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
 import eventsRouter from "./routers/events.router";
+import authRouter from './routers/auth.router';
+import profileRouter from './routers/profile.router';
+import dashboardRouter from './routers/dashboard.router';
+import bookingRouter from "./routers/bookings.router";
+import { mainJobs } from "./jobs/main.job";
 import cors from 'cors';
 import { corsOptions } from "./config/cors.config";
 
@@ -10,6 +15,12 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/api/events", eventsRouter);
+app.use('/auth', authRouter);
+app.use('/profile', profileRouter);
+app.use('/dashboard', dashboardRouter);
+app.use("/api/bookings", bookingRouter);
+
+mainJobs()
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error("ERROR:", err);
