@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response, Router } from "express";
+import { jwtVerify, roleverify } from "../middlewares/auth.middleware";
 import { eventsController } from "../controllers/events.controller";
 import { expressRequestValidation } from "../middleware/express.request.validation.middleware";
 import { createEventValidator } from "../validators/event.validator";
