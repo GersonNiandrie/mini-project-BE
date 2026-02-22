@@ -128,7 +128,7 @@ export const eventsServices = {
           seatTotal: Number(seatTotal),
           eventType,
           eventCategory,
-          userId: "87a022c5-5e12-484a-a3d8-4d7e68c9943c",
+          userId,
         },
       });
 
