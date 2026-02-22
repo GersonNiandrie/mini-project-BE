@@ -1,15 +1,27 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { JWT_TOKEN_SECRET_KEY } from "../config/main.config";
+import AppError from "../helpers/app-error.helper";
 
-export function jwtVerify(secretKey: string){
-    return function (req: Request, res: Response, next: NextFunction) {
-        const token = req?.cookies?.accessToken;
+export function jwtVerify(secretKey: string) {
+  return function (req: Request, res: Response, next: NextFunction) {
+    const token = req?.cookies?.accessToken;
 
-        const payload = jwt.verify(token, secretKey);
+    const payload = jwt.verify(token, secretKey);
 
-        res.locals.payload = payload;
+    res.locals.payload = payload;
 
-        next();
-    };
+    next();
+  };
+}
+
+export function roleverify(allowedRoles: string[]) {
+  return function (req: Request, res: Response, next: NextFunction) {
+    const { role } = res?.locals?.payload;
+
+    if (!allowedRoles.includes(role))
+      throw AppError("Authorized acess user role", 401);
+
+    next();
+  };
 }
