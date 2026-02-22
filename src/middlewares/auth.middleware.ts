@@ -14,14 +14,3 @@ export function jwtVerify(secretKey: string) {
     next();
   };
 }
-
-export function roleverify(allowedRoles: string[]) {
-  return function (req: Request, res: Response, next: NextFunction) {
-    const { role } = res?.locals?.payload;
-
-    if (!allowedRoles.includes(role))
-      throw AppError("Authorized acess user role", 401);
-
-    next();
-  };
-}

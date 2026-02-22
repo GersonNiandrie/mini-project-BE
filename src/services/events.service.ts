@@ -111,6 +111,8 @@ export const eventsServices = {
     }: CreateEvent
     
   ) {
+    
+
     if (!file) {
       throw AppError("Image is required", 400);
     }

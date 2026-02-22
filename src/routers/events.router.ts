@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { jwtVerify, roleverify } from "../middlewares/auth.middleware";
+import { jwtVerify} from "../middlewares/auth.middleware";
 import { eventsController } from "../controllers/events.controller";
 import { expressRequestValidation } from "../middleware/express.request.validation.middleware";
 import { createEventValidator } from "../validators/event.validator";
@@ -12,10 +12,11 @@ const router = Router()
 
 router.get("/", eventsController.getByFilter);
 router.get('/:id', eventsController.getById)
+
+
 router.post(
   "/",
   jwtVerify(JWT_TOKEN_SECRET_KEY!),
-  roleverify(["ORGANIZE"]),
   multerUpload(
     "src/uploads",
     "IMG-MENU",
