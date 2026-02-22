@@ -4,6 +4,8 @@ import { eventsController } from "../controllers/events.controller";
 import { expressRequestValidation } from "../middleware/express.request.validation.middleware";
 import { createEventValidator } from "../validators/event.validator";
 import { multerUpload } from "../helpers/multer.helper";
+import { JWT_TOKEN_SECRET_KEY } from "../config/main.config";
+import { parseTicketType } from "../middlewares/parse-ticket-type.middleware";
 
 const router = Router()
 
@@ -12,17 +14,15 @@ router.get("/", eventsController.getByFilter);
 router.get('/:id', eventsController.getById)
 router.post(
   "/",
+  jwtVerify(JWT_TOKEN_SECRET_KEY!),
+  roleverify(["ORGANIZE"]),
   multerUpload(
     "src/uploads",
     "IMG-MENU",
     ["jpg", "jpeg", "png", "svg", "webp"],
     "memory",
   ).single("image"),
-  (req: Request, res: Response, next: NextFunction) => {
-    if (typeof req.body.ticketType === 'string') {
-      req.body.ticketType = JSON.parse(req.body.ticketType);
-    }
-    next();},
+  parseTicketType,
   createEventValidator,
   expressRequestValidation,
   eventsController.create,
