@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { jwtVerify} from "../middlewares/auth.middleware";
 import { eventsController } from "../controllers/events.controller";
-import { expressRequestValidation } from "../middleware/express.request.validation.middleware";
+import { expressRequestValidation } from "../middlewares/express.request.validation.middleware";
 import { createEventValidator } from "../validators/event.validator";
 import { multerUpload } from "../helpers/multer.helper";
 import { JWT_TOKEN_SECRET_KEY } from "../config/main.config";
