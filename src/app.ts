@@ -1,17 +1,13 @@
+import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
 import eventsRouter from "./routers/events.router";
-
-import cors from "cors";
+import cors from 'cors';
 import { corsOptions } from "./config/cors.config";
 
-const PORT: number = 8000;
-
+const PORT: number = 8080;
 const app = express();
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 app.use(cors(corsOptions));
+app.use(express.json());
 
 app.use("/api/events", eventsRouter);
 
